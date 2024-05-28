@@ -1,9 +1,16 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { upVote, create } from "./reducers/anecdoteReducer";
+import { filterBy } from "./reducers/filterReducer";
 
 function AnecdotesList() {
-  const anecdotes = useSelector((state) => state);
+  const anecdotes = useSelector(({ anecdotes, filter }) => {
+    if (filter === "") return anecdotes;
+    else {
+      const regex = new RegExp(filter, "i");
+      return anecdotes.filter((item) => regex.test(item.content));
+    }
+  });
   const dispatch = useDispatch();
 
   const vote = (id) => {
@@ -58,9 +65,33 @@ function AnecdoteForm() {
   );
 }
 
+function FilterForm() {
+  const dispatch = useDispatch();
+  const filter = useSelector(({ filter }) => filter);
+
+  return (
+    <div>
+      <h2>Filter</h2>
+      <form>
+        <div>
+          <input
+            type="text"
+            value={filter}
+            onChange={({ target }) => {
+              // setFilterInput(target.value);
+              dispatch(filterBy(target.value));
+            }}
+          />
+        </div>
+      </form>
+    </div>
+  );
+}
+
 const App = () => {
   return (
     <div>
+      <FilterForm />
       <AnecdotesList />
       <AnecdoteForm />
     </div>
