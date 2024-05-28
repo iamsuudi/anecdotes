@@ -24,11 +24,17 @@ const reducer = (state = initialState, action) => {
   console.log('action', action)
   switch (action.type) {
     case 'UPVOTE':
-      return state.map((item, index) => {
+      return state.map(item=> {
         if (item.id === action.payLoad)
           return ({ content: item.content, id: item.id, votes: item.votes + 1 });
         return item
       });
+    case 'CREATE':
+      return state.concat({
+        content: action.payLoad,
+        id: getId(),
+        votes: 0
+      })
     default:
       return state;
   }
@@ -38,6 +44,13 @@ export function upVote(id) {
   return ({
     type: 'UPVOTE',
     payLoad: id
+  })
+}
+
+export function create(content) {
+  return ({
+    type: 'CREATE',
+    payLoad: content
   })
 }
 
