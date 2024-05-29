@@ -2,10 +2,12 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { createAnecdote, upvoteAnecdote } from "./reducers/anecdoteReducer";
 import { filterBy } from "./reducers/filterReducer";
+import Notification from "./components/Notification";
+import { showNotification } from "./reducers/notificationReducer";
 
 function AnecdotesList() {
     const anecdotes = useSelector(({ anecdotes, filter }) => {
-      console.log('anecdotes ', anecdotes);
+        console.log("anecdotes ", anecdotes);
         if (filter === "") return anecdotes;
         else {
             const regex = new RegExp(filter, "i");
@@ -17,13 +19,20 @@ function AnecdotesList() {
     const vote = (id) => {
         console.log("vote", id);
         dispatch(upvoteAnecdote(id));
+        dispatch(
+            showNotification(
+                `You upvoted ${
+                    anecdotes.find((item) => item.id === id).content
+                }`
+            )
+        );
     };
 
     return (
         <>
             <h2>Anecdotes</h2>
             {anecdotes
-                .map(anecdote => anecdote)
+                .map((anecdote) => anecdote)
                 .sort((a, b) => a.votes < b.votes)
                 .map((anecdote) => (
                     <div key={anecdote.id}>
@@ -48,6 +57,7 @@ function AnecdoteForm() {
         e.preventDefault();
         console.log("new one", newAnectode);
         dispatch(createAnecdote(newAnectode));
+        dispatch(showNotification(`You created new anecdote: ${newAnectode}`));
     };
 
     return (
@@ -96,6 +106,7 @@ const App = () => {
     return (
         <div>
             <FilterForm />
+            <Notification />
             <AnecdotesList />
             <AnecdoteForm />
         </div>
