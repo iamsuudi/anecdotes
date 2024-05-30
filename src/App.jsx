@@ -2,13 +2,11 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
     createAnecdote,
-    setAnecdotes,
     upvoteAnecdote,
+    initializeAnecdotes,
 } from "./reducers/anecdoteReducer";
 import { filterBy } from "./reducers/filterReducer";
 import Notification from "./components/Notification";
-import { showNotification } from "./reducers/notificationReducer";
-import * as anecdoteService from "./services/anecdote";
 
 function AnecdotesList() {
     const dispatch = useDispatch();
@@ -22,22 +20,13 @@ function AnecdotesList() {
     });
 
     const vote = (id) => {
-        console.log("vote", id);
         dispatch(upvoteAnecdote(id));
-        dispatch(
-            showNotification(
-                `You upvoted ${
-                    anecdotes.find((item) => item.id === id).content
-                }`
-            )
-        );
     };
 
     useEffect(() => {
-        anecdoteService.getAll().then((anecdotes) => {
-            dispatch(setAnecdotes(anecdotes));
-        });
-    }, []);
+        dispatch(initializeAnecdotes());
+        console.log('initialize');
+    }, [dispatch]);
 
     return (
         <>
@@ -66,11 +55,9 @@ function AnecdoteForm() {
 
     const createNew = async (e) => {
         e.preventDefault();
-        console.log("new one", newAnectode);
-        const returnedAnecdote = await anecdoteService.createNew({ content: newAnectode, votes: 0 });
-        dispatch(createAnecdote(returnedAnecdote));
-        dispatch(showNotification(`You created new anecdote: ${newAnectode}`));
-        setAnecdotes('')
+        const content = newAnectode;
+        setNewAnectode("");
+        dispatch(createAnecdote(content));
     };
 
     return (
