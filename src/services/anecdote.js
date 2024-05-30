@@ -19,4 +19,16 @@ const createNew = async (content) => {
     return response.data;
 };
 
-export { getAll, createNew };
+const upvote = async (id, votes) => {
+    const response = await axios({
+        method: "patch",
+        baseURL,
+        url: `/${id}`,
+        data: {
+            votes,
+        },
+    });
+    return response.data;
+};
+
+export { getAll, createNew, upvote };

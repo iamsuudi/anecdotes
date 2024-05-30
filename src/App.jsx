@@ -19,8 +19,8 @@ function AnecdotesList() {
         }
     });
 
-    const vote = (id) => {
-        dispatch(upvoteAnecdote(id));
+    const vote = (anecdote) => {
+        dispatch(upvoteAnecdote(anecdote));
     };
 
     useEffect(() => {
@@ -39,7 +39,7 @@ function AnecdotesList() {
                         <div>{anecdote.content}</div>
                         <div>
                             has {anecdote.votes}
-                            <button onClick={() => vote(anecdote.id)}>
+                            <button onClick={() => vote(anecdote)}>
                                 vote
                             </button>
                         </div>
