@@ -1,7 +1,5 @@
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    initializeAnecdotes,
     upvoteAnecdote,
 } from "../reducers/anecdoteReducer";
 import { filterBy } from "../reducers/filterReducer";
@@ -44,11 +42,6 @@ export default function Anecdotes() {
     const voteHandler = (anecdote) => {
         dispatch(upvoteAnecdote(anecdote));
     };
-
-    useEffect(() => {
-        dispatch(initializeAnecdotes());
-        // console.log("initialize");
-    }, [dispatch]);
 
     return (
         <>

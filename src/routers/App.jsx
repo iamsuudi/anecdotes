@@ -1,6 +1,16 @@
 import { Outlet, NavLink } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { initializeAnecdotes } from "../reducers/anecdoteReducer";
 
 const App = () => {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(initializeAnecdotes());
+        // console.log("initialize");
+    }, [dispatch]);
+
     return (
         <div
             style={{
@@ -10,10 +20,7 @@ const App = () => {
                 justifyContent: "center",
             }}
         >
-            <div
-                style={{
-                }}
-            >
+            <div style={{}}>
                 <div
                     style={{
                         display: "flex",
